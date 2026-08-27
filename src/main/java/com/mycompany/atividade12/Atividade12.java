@@ -11,6 +11,6 @@ package com.mycompany.atividade12;
 public class Atividade12 {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.println("Boa noite!");
     }
 }
