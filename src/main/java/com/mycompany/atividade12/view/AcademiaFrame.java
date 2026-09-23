@@ -18,8 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Tela de CRUD completo (criar, listar, editar, excluir) para Academia.
- * Sirva-se dela como modelo para as telas das outras entidades.
+ * tela de CRUD completo (criar, listar, editar, excluir) para Academia
  */
 public class AcademiaFrame extends JFrame {
 
@@ -103,10 +102,10 @@ public class AcademiaFrame extends JFrame {
 
     private void salvar() {
         try {
-            Academia a = new Academia();
-            a.setNome(campoNome.getText());
-            a.setCidade(campoCidade.getText());
-            dao.inserir(a);
+            Academia academia = new Academia();
+            academia.setNome(campoNome.getText());
+            academia.setCidade(campoCidade.getText());
+            dao.inserir(academia);
             carregarTabela();
             limparFormulario();
         } catch (SQLException ex) {
@@ -120,11 +119,10 @@ public class AcademiaFrame extends JFrame {
             return;
         }
         try {
-            Academia a = new Academia();
-            a.setId(idSelecionado);
-            a.setNome(campoNome.getText());
-            a.setCidade(campoCidade.getText());
-            dao.atualizar(a);
+           Academia academia = new Academia();
+           academia.setNome(campoNome.getText());
+           academia.setCidade(campoCidade.getText());
+           dao.inserir(academia);
             carregarTabela();
             limparFormulario();
         } catch (SQLException ex) {
