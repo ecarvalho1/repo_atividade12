@@ -101,6 +101,10 @@ public class AcademiaFrame extends JFrame {
     }
 
     private void salvar() {
+         if (!camposPreenchidos()) {
+        JOptionPane.showMessageDialog(this, "Preencha nome e cidade antes de salvar");
+        return;
+         }
         try {
             Academia academia = new Academia();
             academia.setNome(campoNome.getText());
@@ -114,6 +118,11 @@ public class AcademiaFrame extends JFrame {
     }
 
     private void atualizar() {
+         if (!camposPreenchidos()) {
+        JOptionPane.showMessageDialog(this, "Preencha nome e cidade antes de salvar");
+        return;
+         }
+         
         if (idSelecionado == -1) {
             JOptionPane.showMessageDialog(this, "Selecione uma academia na tabela primeiro.");
             return;
@@ -151,6 +160,10 @@ public class AcademiaFrame extends JFrame {
         tabela.clearSelection();
     }
 
+    private boolean camposPreenchidos() {
+        return !campoNome.getText().trim().isEmpty() && !campoCidade.getText().trim().isEmpty();
+    }
+    
     private void mostrarErro(Exception ex) {
         JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
     }
