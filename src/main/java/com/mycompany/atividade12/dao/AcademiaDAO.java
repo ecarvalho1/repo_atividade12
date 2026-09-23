@@ -53,7 +53,7 @@ public class AcademiaDAO {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Academia(rs.getInt("id"), rs.getString("nome"), rs.getString("cidade"));
+                    return mapearAcademia(rs);
                 }
             }
         }
@@ -67,9 +67,12 @@ public class AcademiaDAO {
              PreparedStatement stmt = con.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                lista.add(new Academia(rs.getInt("id"), rs.getString("nome"), rs.getString("cidade")));
+                lista.add(mapearAcademia(rs));
             }
         }
         return lista;
     }
+    private Academia mapearAcademia(ResultSet rs) throws SQLException {
+    return new Academia(rs.getInt("id"), rs.getString("nome"), rs.getString("cidade"));
+  }
 }
