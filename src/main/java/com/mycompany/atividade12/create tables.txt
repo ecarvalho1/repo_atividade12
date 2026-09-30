@@ -1,0 +1,46 @@
+create table academia (
+	id serial primary key,
+	nome varchar(100) not null,
+	cidade varchar(100)
+);
+
+create table categoria (
+	id serial primary key,
+	nome varchar(100) not null,
+	faixa varchar(50),
+	peso_min numeric(5,2),
+	peso_max numeric(5,2)
+);
+
+create table campeonato (
+	id serial primary key,
+	nome varchar(150) not null,
+	data date,
+	local varchar(150)
+);
+
+create table atleta(
+	id serial primary key,
+	academia_id integer references academia(id),
+	nome varchar(150) not null,
+	data_nasc date,
+	faixa varchar(50),
+	peso numeric(5,2)
+);
+
+create table inscricao (
+	id serial primary key,
+	atleta_id integer references atleta(id),
+	categoria_id integer references categoria(id),
+	campeonato_id integer references campeonato(id)
+);
+
+create table luta(
+	id serial primary key,
+	campeonato_id integer references campeonato(id),
+	categoria_id integer references categoria(id),
+	atleta_id integer references atleta(id),
+	atleta2_id integer references atleta(id),
+	resultado VARCHAR(100)
+);
+

@@ -1,12 +1,12 @@
 package com.mycompany.atividade12;
 
-import com.mycompany.atividade12.view.LutaFrame;
+import com.mycompany.atividade12.view.MenuPrincipalFrameNB;
 
 import javax.swing.SwingUtilities;
 
 public class Atividade12 {
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LutaFrame().setVisible(true));
+        SwingUtilities.invokeLater(() -> new MenuPrincipalFrameNB().setVisible(true));
     }
 }
