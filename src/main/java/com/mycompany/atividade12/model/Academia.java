@@ -43,7 +43,7 @@ public class Academia {
     }
 
     @Override
-    public String toString() {
-        return nome;
+public String toString() {
+    return nome + " (" + cidade + ")";
     }
 }

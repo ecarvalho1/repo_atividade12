@@ -20,6 +20,8 @@ public class LutaFrameNB extends javax.swing.JFrame {
         configurarTabela();
         carregarCombos();
         carregarTabela();
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -49,6 +51,7 @@ public class LutaFrameNB extends javax.swing.JFrame {
         btnAtualizar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,6 +113,10 @@ public class LutaFrameNB extends javax.swing.JFrame {
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(this::btnExcluirActionPerformed);
 
+        btnVoltar.setBackground(new java.awt.Color(204, 204, 204));
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(this::btnVoltarActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,6 +160,9 @@ public class LutaFrameNB extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(btnVoltar)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +195,8 @@ public class LutaFrameNB extends javax.swing.JFrame {
                     .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(btnVoltar))
         );
 
         pack();
@@ -314,6 +325,10 @@ private int idSelecionado = -1;
             javax.swing.JOptionPane.showMessageDialog(this, "Atleta 1 e Atleta 2 precisam ser diferentes.");
             return;
         }
+        if (campoResultado.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Informe o resultado da luta.");
+            return;
+        }
         try {
             com.mycompany.atividade12.model.Luta luta = new com.mycompany.atividade12.model.Luta();
             luta.setCampeonatoId(((com.mycompany.atividade12.model.Campeonato) comboCampeonato.getSelectedItem()).getId());
@@ -324,10 +339,14 @@ private int idSelecionado = -1;
             dao.inserir(luta);
             carregarTabela();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
-        }
-    }//GEN-LAST:event_btnSalvarActionPerformed
+            if ("23514".equals(ex.getSQLState()) || "23502".equals(ex.getSQLState())) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Informe o resultado da luta.");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            }
 
+    }//GEN-LAST:event_btnSalvarActionPerformed
+}
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
         if (idSelecionado == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Selecione uma luta na tabela primeiro.");
@@ -335,6 +354,10 @@ private int idSelecionado = -1;
         }
         if (!atletasSaoDiferentes()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Atleta 1 e Atleta 2 precisam ser diferentes.");
+            return;
+        }
+        if (campoResultado.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Informe o resultado da luta.");
             return;
         }
         try {
@@ -348,7 +371,11 @@ private int idSelecionado = -1;
             dao.atualizar(luta);
             carregarTabela();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            if ("23514".equals(ex.getSQLState()) || "23502".equals(ex.getSQLState())) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Informe o resultado da luta.");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            }
         }
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
@@ -364,6 +391,10 @@ private int idSelecionado = -1;
             javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -395,6 +426,7 @@ private int idSelecionado = -1;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JTextField campoResultado;
     private javax.swing.JComboBox<String> comboAtleta1;
     private javax.swing.JComboBox<String> comboAtleta2;

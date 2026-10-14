@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.atividade12.view;
-
+import com.mycompany.atividade12.util.Formatacao;
 /**
  *
  * @author dudac
@@ -20,6 +20,8 @@ public class AtletaFrameNB extends javax.swing.JFrame {
         configurarTabela();
         carregarAcademias();
         carregarTabela();
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -47,12 +49,13 @@ public class AtletaFrameNB extends javax.swing.JFrame {
         btnAtualizar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Nome:");
 
-        jLabel2.setText("Data nascimento (AAAA-MM-DD):");
+        jLabel2.setText("Data nascimento (DD-MM-AAAA):");
 
         jLabel3.setText("Faixa:");
 
@@ -90,6 +93,10 @@ public class AtletaFrameNB extends javax.swing.JFrame {
 
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(this::btnLimparActionPerformed);
+
+        btnVoltar.setBackground(new java.awt.Color(204, 204, 204));
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(this::btnVoltarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,6 +137,9 @@ public class AtletaFrameNB extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(btnVoltar)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,13 +168,14 @@ public class AtletaFrameNB extends javax.swing.JFrame {
                     .addComponent(comboAcademia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnVoltar))
         );
 
         pack();
@@ -203,8 +214,8 @@ private void configurarTabela() {
             listaAtual = dao.listarTodos();
             for (com.mycompany.atividade12.model.Atleta atleta : listaAtual) {
                 modeloTabela.addRow(new Object[]{
-                    atleta.getId(), atleta.getNome(), atleta.getDataNasc(),
-                    atleta.getFaixa(), atleta.getPeso(), atleta.getAcademiaNome()
+                    atleta.getId(), atleta.getNome(), atleta.getDataNasc().format(Formatacao.DATA_BR),
+                    atleta.getFaixa(), Formatacao.mostrarDecimal(atleta.getPeso()), atleta.getAcademiaNome()
                 });
             }
         } catch (java.sql.SQLException ex) {
@@ -218,9 +229,9 @@ private void configurarTabela() {
             com.mycompany.atividade12.model.Atleta atleta = listaAtual.get(linha);
             idSelecionado = atleta.getId();
             campoNome.setText(atleta.getNome());
-            campoNasc.setText(atleta.getDataNasc().toString());
+            campoNasc.setText(atleta.getDataNasc().format(Formatacao.DATA_BR));
             campoFaixa.setText(atleta.getFaixa());
-            campoPeso.setText(String.valueOf(atleta.getPeso()));
+            campoPeso.setText(Formatacao.mostrarDecimal(atleta.getPeso()));
             for (int i = 0; i < comboAcademia.getItemCount(); i++) {
                 Object itemAtual = comboAcademia.getItemAt(i);
                 com.mycompany.atividade12.model.Academia academiaDoItem
@@ -240,15 +251,15 @@ private void configurarTabela() {
         try {
             com.mycompany.atividade12.model.Atleta atleta = new com.mycompany.atividade12.model.Atleta();
             atleta.setNome(campoNome.getText());
-            atleta.setDataNasc(java.time.LocalDate.parse(campoNasc.getText().trim()));
+            atleta.setDataNasc(java.time.LocalDate.parse(campoNasc.getText().trim(), Formatacao.DATA_BR));
             atleta.setFaixa(campoFaixa.getText());
-            atleta.setPeso(Double.parseDouble(campoPeso.getText().trim()));
+            atleta.setPeso(Formatacao.lerDecimal(campoPeso.getText()));
             com.mycompany.atividade12.model.Academia academia = (com.mycompany.atividade12.model.Academia) comboAcademia.getSelectedItem();
             atleta.setAcademiaId(academia.getId());
             dao.inserir(atleta);
             carregarTabela();
         } catch (java.time.format.DateTimeParseException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use AAAA-MM-DD.");
+            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD-MM-AAAA");
         } catch (NumberFormatException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Peso deve ser um número.");
         } catch (java.sql.SQLException ex) {
@@ -269,15 +280,15 @@ private void configurarTabela() {
             com.mycompany.atividade12.model.Atleta atleta = new com.mycompany.atividade12.model.Atleta();
             atleta.setId(idSelecionado);
             atleta.setNome(campoNome.getText());
-            atleta.setDataNasc(java.time.LocalDate.parse(campoNasc.getText().trim()));
+            atleta.setDataNasc(java.time.LocalDate.parse(campoNasc.getText().trim(), Formatacao.DATA_BR));
             atleta.setFaixa(campoFaixa.getText());
-            atleta.setPeso(Double.parseDouble(campoPeso.getText().trim()));
+            atleta.setPeso(Formatacao.lerDecimal(campoPeso.getText()));
             com.mycompany.atividade12.model.Academia academia = (com.mycompany.atividade12.model.Academia) comboAcademia.getSelectedItem();
             atleta.setAcademiaId(academia.getId());
             dao.atualizar(atleta);
             carregarTabela();
         } catch (java.time.format.DateTimeParseException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use AAAA-MM-DD.");
+            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD/MM/AAAA (ex: 20/11/2026).");
         } catch (NumberFormatException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Peso deve ser um número.");
         } catch (java.sql.SQLException ex) {
@@ -311,6 +322,10 @@ private void configurarTabela() {
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -341,6 +356,7 @@ private void configurarTabela() {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JTextField campoFaixa;
     private javax.swing.JTextField campoNasc;
     private javax.swing.JTextField campoNome;

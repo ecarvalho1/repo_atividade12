@@ -1,46 +1,49 @@
 create table academia (
-	id serial primary key,
-	nome varchar(100) not null,
-	cidade varchar(100)
+    id serial primary key,
+    nome varchar(100) not null,
+    cidade varchar(100),
+    constraint academia_nome_cidade_unique unique (nome, cidade)
 );
 
 create table categoria (
-	id serial primary key,
-	nome varchar(100) not null,
-	faixa varchar(50),
-	peso_min numeric(5,2),
-	peso_max numeric(5,2)
+    id serial primary key,
+    nome varchar(100) not null,
+    faixa varchar(50),
+    peso_min numeric(5,2),
+    peso_max numeric(5,2),
+    constraint categoria_nome_unique unique (nome)
 );
 
 create table campeonato (
-	id serial primary key,
-	nome varchar(150) not null,
-	data date,
-	local varchar(150)
+    id serial primary key,
+    nome varchar(150) not null,
+    data date,
+    local varchar(150)
 );
 
-create table atleta(
-	id serial primary key,
-	academia_id integer references academia(id),
-	nome varchar(150) not null,
-	data_nasc date,
-	faixa varchar(50),
-	peso numeric(5,2)
+create table atleta (
+    id serial primary key,
+    academia_id integer references academia(id),
+    nome varchar(150) not null,
+    data_nasc date,
+    faixa varchar(50),
+    peso numeric(5,2),
+    constraint atleta_nome_unique unique (nome)
 );
 
 create table inscricao (
-	id serial primary key,
-	atleta_id integer references atleta(id),
-	categoria_id integer references categoria(id),
-	campeonato_id integer references campeonato(id)
+    id serial primary key,
+    atleta_id integer references atleta(id),
+    categoria_id integer references categoria(id),
+    campeonato_id integer references campeonato(id)
 );
 
-create table luta(
-	id serial primary key,
-	campeonato_id integer references campeonato(id),
-	categoria_id integer references categoria(id),
-	atleta_id integer references atleta(id),
-	atleta2_id integer references atleta(id),
-	resultado VARCHAR(100)
+create table luta (
+    id serial primary key,
+    campeonato_id integer references campeonato(id),
+    categoria_id integer references categoria(id),
+    atleta_id integer references atleta(id),
+    atleta2_id integer references atleta(id),
+    resultado varchar(100) not null,
+    constraint luta_resultado_nao_vazio check (trim(resultado) <> '')
 );
-

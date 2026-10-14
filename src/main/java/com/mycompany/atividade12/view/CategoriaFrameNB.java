@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.atividade12.view;
-
+import com.mycompany.atividade12.util.Formatacao;
 /**
  *
  * @author dudac
@@ -19,6 +19,8 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
         initComponents();
         configurarTabela();
         carregarTabela();
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -44,6 +46,7 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
         btnAtualizar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +93,10 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(this::btnExcluirActionPerformed);
 
+        btnVoltar.setBackground(new java.awt.Color(204, 204, 204));
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(this::btnVoltarActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,7 +135,8 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnVoltar))
                         .addGap(0, 2, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -159,7 +167,8 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
                     .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVoltar))
         );
 
         pack();
@@ -190,7 +199,7 @@ private int idSelecionado = -1;
             for (com.mycompany.atividade12.model.Categoria categoria : listaAtual) {
                 modeloTabela.addRow(new Object[]{
                     categoria.getId(), categoria.getNome(), categoria.getFaixa(),
-                    categoria.getPesoMin(), categoria.getPesoMax()
+                    Formatacao.mostrarDecimal(categoria.getPesoMin()), Formatacao.mostrarDecimal(categoria.getPesoMax())
                 });
             }
         } catch (java.sql.SQLException ex) {
@@ -205,8 +214,8 @@ private int idSelecionado = -1;
             idSelecionado = categoria.getId();
             campoNome.setText(categoria.getNome());
             campoFaixa.setText(categoria.getFaixa());
-            campoPesoMin.setText(String.valueOf(categoria.getPesoMin()));
-            campoPesoMax.setText(String.valueOf(categoria.getPesoMax()));
+            campoPesoMin.setText(Formatacao.mostrarDecimal(categoria.getPesoMin()));
+            campoPesoMax.setText(Formatacao.mostrarDecimal(categoria.getPesoMax()));
         }
     }
     private void campoFaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoFaixaActionPerformed
@@ -226,8 +235,8 @@ private int idSelecionado = -1;
             com.mycompany.atividade12.model.Categoria categoria = new com.mycompany.atividade12.model.Categoria();
             categoria.setNome(campoNome.getText());
             categoria.setFaixa(campoFaixa.getText());
-            categoria.setPesoMin(Double.parseDouble(campoPesoMin.getText().trim()));
-            categoria.setPesoMax(Double.parseDouble(campoPesoMax.getText().trim()));
+            categoria.setPesoMin(Formatacao.lerDecimal(campoPesoMin.getText()));
+            categoria.setPesoMax(Formatacao.lerDecimal(campoPesoMax.getText()));
             dao.inserir(categoria);
             carregarTabela();
         } catch (NumberFormatException ex) {
@@ -251,8 +260,8 @@ private int idSelecionado = -1;
             categoria.setId(idSelecionado);
             categoria.setNome(campoNome.getText());
             categoria.setFaixa(campoFaixa.getText());
-            categoria.setPesoMin(Double.parseDouble(campoPesoMin.getText().trim()));
-            categoria.setPesoMax(Double.parseDouble(campoPesoMax.getText().trim()));
+            categoria.setPesoMin(Formatacao.lerDecimal(campoPesoMin.getText()));
+            categoria.setPesoMax(Formatacao.lerDecimal(campoPesoMax.getText()));
             dao.atualizar(categoria);
             carregarTabela();
         } catch (NumberFormatException ex) {
@@ -284,6 +293,10 @@ private int idSelecionado = -1;
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -314,6 +327,7 @@ private int idSelecionado = -1;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JTextField campoFaixa;
     private javax.swing.JTextField campoNome;
     private javax.swing.JTextField campoPesoMax;

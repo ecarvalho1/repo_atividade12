@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.atividade12.view;
-
+import com.mycompany.atividade12.util.Formatacao;
 /**
  *
  * @author dudac
@@ -19,6 +19,8 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
         initComponents();
         configurarTabela();
         carregarTabela();
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -42,12 +44,13 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
         btnAtualizar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Nome:");
 
-        jLabel2.setText("Data (AAAA-MM-DD):");
+        jLabel2.setText("Data (DD-MM-AAAA):");
 
         jLabel3.setText("Local:");
 
@@ -77,6 +80,10 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
         btnExcluir.setBackground(new java.awt.Color(255, 204, 204));
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(this::btnExcluirActionPerformed);
+
+        jButton1.setBackground(new java.awt.Color(204, 204, 204));
+        jButton1.setText("Voltar");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,6 +119,9 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
                                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 7, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,13 +140,14 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
                     .addComponent(campoLocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
 
         pack();
@@ -149,12 +160,12 @@ private int idSelecionado = -1;
         try {
             com.mycompany.atividade12.model.Campeonato campeonato = new com.mycompany.atividade12.model.Campeonato();
             campeonato.setNome(campoNome.getText());
-            campeonato.setData(java.time.LocalDate.parse(campoData.getText().trim()));
+            campeonato.setData(java.time.LocalDate.parse(campoData.getText().trim(), Formatacao.DATA_BR));
             campeonato.setLocal(campoLocal.getText());
             dao.inserir(campeonato);
             carregarTabela();
         } catch (java.time.format.DateTimeParseException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use AAAA-MM-DD (ex: 2026-11-20).");
+            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD/MM/AAAA (ex: 20/11/2026)");
         } catch (java.sql.SQLException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
         }
@@ -178,7 +189,7 @@ private int idSelecionado = -1;
             for (com.mycompany.atividade12.model.Campeonato campeonato : listaAtual) {
                 modeloTabela.addRow(new Object[]{
                     campeonato.getId(), campeonato.getNome(),
-                    campeonato.getData(), campeonato.getLocal()
+                    campeonato.getData().format(Formatacao.DATA_BR), campeonato.getLocal()
                 });
             }
         } catch (java.sql.SQLException ex) {
@@ -192,7 +203,7 @@ private int idSelecionado = -1;
             com.mycompany.atividade12.model.Campeonato campeonato = listaAtual.get(linha);
             idSelecionado = campeonato.getId();
             campoNome.setText(campeonato.getNome());
-            campoData.setText(campeonato.getData().toString());
+            campoData.setText(campeonato.getData().format(Formatacao.DATA_BR));
             campoLocal.setText(campeonato.getLocal());
         }
     }
@@ -205,12 +216,12 @@ private int idSelecionado = -1;
             com.mycompany.atividade12.model.Campeonato campeonato = new com.mycompany.atividade12.model.Campeonato();
             campeonato.setId(idSelecionado);
             campeonato.setNome(campoNome.getText());
-            campeonato.setData(java.time.LocalDate.parse(campoData.getText().trim()));
+            campeonato.setData(java.time.LocalDate.parse(campoData.getText().trim(), Formatacao.DATA_BR));
             campeonato.setLocal(campoLocal.getText());
             dao.atualizar(campeonato);
             carregarTabela();
         } catch (java.time.format.DateTimeParseException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use AAAA-MM-DD (ex: 2026-11-20).");
+            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD-MM-AAAA");
         } catch (java.sql.SQLException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
         }
@@ -236,6 +247,10 @@ private int idSelecionado = -1;
             javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -270,6 +285,7 @@ private int idSelecionado = -1;
     private javax.swing.JTextField campoData;
     private javax.swing.JTextField campoLocal;
     private javax.swing.JTextField campoNome;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
