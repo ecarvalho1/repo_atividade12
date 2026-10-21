@@ -145,7 +145,7 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-private final com.mycompany.atividade12.dao.CampeonatoDAO dao = new com.mycompany.atividade12.dao.CampeonatoDAO();
+private final com.mycompany.atividade12.dao.CampeonatoDAO dao = new com.mycompany.atividade12.dao.CampeonatoDAOJdbc();
 private javax.swing.table.DefaultTableModel modeloTabela;
 private java.util.List<com.mycompany.atividade12.model.Campeonato> listaAtual;
 private int idSelecionado = -1;
