@@ -42,7 +42,6 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaInscricao = new javax.swing.JTable();
         btnSalvar = new javax.swing.JButton();
-        btnAtualizar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
@@ -77,9 +76,6 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
         btnSalvar.setBackground(new java.awt.Color(204, 255, 204));
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(this::btnSalvarActionPerformed);
-
-        btnAtualizar.setText("Atualizar");
-        btnAtualizar.addActionListener(this::btnAtualizarActionPerformed);
 
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(this::btnLimparActionPerformed);
@@ -121,8 +117,6 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -151,7 +145,6 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -168,18 +161,16 @@ private javax.swing.table.DefaultTableModel modeloTabela;
 private java.util.List<com.mycompany.atividade12.model.Inscricao> listaAtual;
 private int idSelecionado = -1;
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        idSelecionado = -1;
-        if (comboAtleta.getItemCount() > 0) {
-            comboAtleta.setSelectedIndex(0);
-        }
-        if (comboCategoria.getItemCount() > 0) {
-            comboCategoria.setSelectedIndex(0);
-        }
-        if (comboCampeonato.getItemCount() > 0) {
-            comboCampeonato.setSelectedIndex(0);
-        }
-        tabelaInscricao.clearSelection();
+        limparFormulario();
     }//GEN-LAST:event_btnLimparActionPerformed
+    private void limparFormulario() {
+        idSelecionado = -1;
+        com.mycompany.atividade12.util.Combos.limpar(comboAtleta);
+        com.mycompany.atividade12.util.Combos.limpar(comboCategoria);
+        com.mycompany.atividade12.util.Combos.limpar(comboCampeonato);
+        tabelaInscricao.clearSelection();
+    }
+
     private void configurarTabela() {
         modeloTabela = new javax.swing.table.DefaultTableModel(
                 new Object[]{"ID", "Atleta", "Categoria", "Campeonato"}, 0) {
@@ -194,11 +185,11 @@ private int idSelecionado = -1;
 
     private void carregarCombos() {
         try {
-            comboAtleta.setModel(new javax.swing.DefaultComboBoxModel(atletaDao.listarTodos().toArray()));
-            comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(categoriaDao.listarTodos().toArray()));
-            comboCampeonato.setModel(new javax.swing.DefaultComboBoxModel(campeonatoDao.listarTodos().toArray()));
+            com.mycompany.atividade12.util.Combos.carregar(comboAtleta, atletaDao.listarTodos());
+            com.mycompany.atividade12.util.Combos.carregar(comboCategoria, categoriaDao.listarTodos());
+            com.mycompany.atividade12.util.Combos.carregar(comboCampeonato, campeonatoDao.listarTodos());
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }
 
@@ -213,7 +204,7 @@ private int idSelecionado = -1;
                 });
             }
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }
 
@@ -261,41 +252,30 @@ private int idSelecionado = -1;
         }
     }
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try {
-            com.mycompany.atividade12.model.Inscricao inscricao = new com.mycompany.atividade12.model.Inscricao();
-            Object atletaSelecionado = comboAtleta.getSelectedItem();
-            Object categoriaSelecionada = comboCategoria.getSelectedItem();
-            Object campeonatoSelecionado = comboCampeonato.getSelectedItem();
-            inscricao.setAtletaId(((com.mycompany.atividade12.model.Atleta) atletaSelecionado).getId());
-            inscricao.setCategoriaId(((com.mycompany.atividade12.model.Categoria) categoriaSelecionada).getId());
-            inscricao.setCampeonatoId(((com.mycompany.atividade12.model.Campeonato) campeonatoSelecionado).getId());
-            dao.inserir(inscricao);
-            carregarTabela();
-        } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
-        }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        if (idSelecionado == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecione uma inscrição na tabela primeiro.");
+        Object atletaSelecionado = comboAtleta.getSelectedItem();
+        Object categoriaSelecionada = comboCategoria.getSelectedItem();
+        Object campeonatoSelecionado = comboCampeonato.getSelectedItem();
+        if (atletaSelecionado == null || categoriaSelecionada == null || campeonatoSelecionado == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecione o atleta, a categoria e o campeonato.");
             return;
         }
         try {
             com.mycompany.atividade12.model.Inscricao inscricao = new com.mycompany.atividade12.model.Inscricao();
             inscricao.setId(idSelecionado);
-            Object atletaSelecionado = comboAtleta.getSelectedItem();
-            Object categoriaSelecionada = comboCategoria.getSelectedItem();
-            Object campeonatoSelecionado = comboCampeonato.getSelectedItem();
             inscricao.setAtletaId(((com.mycompany.atividade12.model.Atleta) atletaSelecionado).getId());
             inscricao.setCategoriaId(((com.mycompany.atividade12.model.Categoria) categoriaSelecionada).getId());
             inscricao.setCampeonatoId(((com.mycompany.atividade12.model.Campeonato) campeonatoSelecionado).getId());
-            dao.atualizar(inscricao);
+            if (idSelecionado == -1) {
+                dao.inserir(inscricao);
+            } else {
+                dao.atualizar(inscricao);
+            }
             carregarTabela();
+            limparFormulario();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
-    }//GEN-LAST:event_btnAtualizarActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         if (idSelecionado == -1) {
@@ -305,8 +285,9 @@ private int idSelecionado = -1;
         try {
             dao.excluir(idSelecionado);
             carregarTabela();
+            limparFormulario();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -340,7 +321,6 @@ private int idSelecionado = -1;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;

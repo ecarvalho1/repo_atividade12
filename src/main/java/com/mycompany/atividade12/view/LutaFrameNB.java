@@ -19,6 +19,7 @@ public class LutaFrameNB extends javax.swing.JFrame {
         initComponents();
         configurarTabela();
         carregarCombos();
+        configurarResultado();
         carregarTabela();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -40,7 +41,7 @@ public class LutaFrameNB extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        campoResultado = new javax.swing.JTextField();
+        comboResultado = new javax.swing.JComboBox<>();
         comboCampeonato = new javax.swing.JComboBox<>();
         comboCategoria = new javax.swing.JComboBox<>();
         comboAtleta1 = new javax.swing.JComboBox<>();
@@ -48,7 +49,6 @@ public class LutaFrameNB extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaLuta = new javax.swing.JTable();
         btnSalvar = new javax.swing.JButton();
-        btnAtualizar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
@@ -103,9 +103,6 @@ public class LutaFrameNB extends javax.swing.JFrame {
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(this::btnSalvarActionPerformed);
 
-        btnAtualizar.setText("Atualizar");
-        btnAtualizar.addActionListener(this::btnAtualizarActionPerformed);
-
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(this::btnLimparActionPerformed);
 
@@ -141,7 +138,7 @@ public class LutaFrameNB extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(campoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(comboResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -153,8 +150,6 @@ public class LutaFrameNB extends javax.swing.JFrame {
                         .addContainerGap(13, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -186,13 +181,12 @@ public class LutaFrameNB extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(campoResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
@@ -209,22 +203,65 @@ private javax.swing.table.DefaultTableModel modeloTabela;
 private java.util.List<com.mycompany.atividade12.model.Luta> listaAtual;
 private int idSelecionado = -1;
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        idSelecionado = -1;
-        if (comboCampeonato.getItemCount() > 0) {
-            comboCampeonato.setSelectedIndex(0);
-        }
-        if (comboCategoria.getItemCount() > 0) {
-            comboCategoria.setSelectedIndex(0);
-        }
-        if (comboAtleta1.getItemCount() > 0) {
-            comboAtleta1.setSelectedIndex(0);
-        }
-        if (comboAtleta2.getItemCount() > 0) {
-            comboAtleta2.setSelectedIndex(0);
-        }
-        campoResultado.setText("");
-        tabelaLuta.clearSelection();
+        limparFormulario();
     }//GEN-LAST:event_btnLimparActionPerformed
+    private void limparFormulario() {
+        idSelecionado = -1;
+        tabelaLuta.clearSelection();
+        com.mycompany.atividade12.util.Combos.limpar(comboCampeonato);
+        com.mycompany.atividade12.util.Combos.limpar(comboCategoria);
+        com.mycompany.atividade12.util.Combos.limpar(comboAtleta1);
+        com.mycompany.atividade12.util.Combos.limpar(comboAtleta2);
+        // o resultado é limpo e desabilitado sozinho, pelos ouvintes das combos acima
+    }
+
+    /**
+     * O resultado é uma combo com os dois atletas da luta (o vencedor).
+     * Ela só fica habilitada depois que campeonato, categoria e os dois
+     * atletas (diferentes) foram escolhidos.
+     */
+    private void configurarResultado() {
+        java.awt.event.ActionListener ouvinte = e -> atualizarComboResultado();
+        comboCampeonato.addActionListener(ouvinte);
+        comboCategoria.addActionListener(ouvinte);
+        comboAtleta1.addActionListener(ouvinte);
+        comboAtleta2.addActionListener(ouvinte);
+        atualizarComboResultado();
+    }
+
+    private void atualizarComboResultado() {
+        com.mycompany.atividade12.model.Atleta anterior = (com.mycompany.atividade12.model.Atleta) comboResultado.getSelectedItem();
+        boolean completo = comboCampeonato.getSelectedItem() != null
+                && comboCategoria.getSelectedItem() != null
+                && atletasSaoDiferentes();
+        java.util.List<com.mycompany.atividade12.model.Atleta> opcoes = new java.util.ArrayList<>();
+        if (completo) {
+            opcoes.add((com.mycompany.atividade12.model.Atleta) comboAtleta1.getSelectedItem());
+            opcoes.add((com.mycompany.atividade12.model.Atleta) comboAtleta2.getSelectedItem());
+        }
+        com.mycompany.atividade12.util.Combos.carregar(comboResultado, opcoes);
+        // se o vencedor escolhido continua sendo um dos dois, mantém a escolha
+        if (anterior != null) {
+            for (int i = 0; i < opcoes.size(); i++) {
+                if (opcoes.get(i).getId() == anterior.getId()) {
+                    comboResultado.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        comboResultado.setEnabled(completo);
+    }
+
+    private void selecionarResultadoNoCombo(String nomeVencedor) {
+        for (int i = 0; i < comboResultado.getItemCount(); i++) {
+            Object item = comboResultado.getItemAt(i);
+            if (((com.mycompany.atividade12.model.Atleta) item).getNome().equals(nomeVencedor)) {
+                comboResultado.setSelectedIndex(i);
+                return;
+            }
+        }
+    }
+
     private void configurarTabela() {
         modeloTabela = new javax.swing.table.DefaultTableModel(
                 new Object[]{"ID", "Campeonato", "Categoria", "Atleta 1", "Atleta 2", "Resultado"}, 0) {
@@ -239,13 +276,13 @@ private int idSelecionado = -1;
 
     private void carregarCombos() {
         try {
-            comboCampeonato.setModel(new javax.swing.DefaultComboBoxModel(campeonatoDao.listarTodos().toArray()));
-            comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(categoriaDao.listarTodos().toArray()));
-            Object[] atletas = atletaDao.listarTodos().toArray();
-            comboAtleta1.setModel(new javax.swing.DefaultComboBoxModel(atletas));
-            comboAtleta2.setModel(new javax.swing.DefaultComboBoxModel(atletas));
+            com.mycompany.atividade12.util.Combos.carregar(comboCampeonato, campeonatoDao.listarTodos());
+            com.mycompany.atividade12.util.Combos.carregar(comboCategoria, categoriaDao.listarTodos());
+            java.util.List<com.mycompany.atividade12.model.Atleta> atletas = atletaDao.listarTodos();
+            com.mycompany.atividade12.util.Combos.carregar(comboAtleta1, atletas);
+            com.mycompany.atividade12.util.Combos.carregar(comboAtleta2, atletas);
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }
 
@@ -260,7 +297,7 @@ private int idSelecionado = -1;
                 });
             }
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }
 
@@ -273,7 +310,7 @@ private int idSelecionado = -1;
             selecionarCategoriaNoCombo(luta.getCategoriaId());
             selecionarAtletaNoCombo(comboAtleta1, luta.getAtletaId());
             selecionarAtletaNoCombo(comboAtleta2, luta.getAtleta2Id());
-            campoResultado.setText(luta.getResultado());
+            selecionarResultadoNoCombo(luta.getResultado());
         }
     }
 
@@ -321,43 +358,18 @@ private int idSelecionado = -1;
         return a1.getId() != a2.getId();
     }
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if (!atletasSaoDiferentes()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Atleta 1 e Atleta 2 precisam ser diferentes.");
-            return;
-        }
-        if (campoResultado.getText().trim().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Informe o resultado da luta.");
-            return;
-        }
-        try {
-            com.mycompany.atividade12.model.Luta luta = new com.mycompany.atividade12.model.Luta();
-            luta.setCampeonatoId(((com.mycompany.atividade12.model.Campeonato) comboCampeonato.getSelectedItem()).getId());
-            luta.setCategoriaId(((com.mycompany.atividade12.model.Categoria) comboCategoria.getSelectedItem()).getId());
-            luta.setAtletaId(((com.mycompany.atividade12.model.Atleta) comboAtleta1.getSelectedItem()).getId());
-            luta.setAtleta2Id(((com.mycompany.atividade12.model.Atleta) comboAtleta2.getSelectedItem()).getId());
-            luta.setResultado(campoResultado.getText());
-            dao.inserir(luta);
-            carregarTabela();
-        } catch (java.sql.SQLException ex) {
-            if ("23514".equals(ex.getSQLState()) || "23502".equals(ex.getSQLState())) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Informe o resultado da luta.");
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
-            }
-
-    }//GEN-LAST:event_btnSalvarActionPerformed
-}
-    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        if (idSelecionado == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecione uma luta na tabela primeiro.");
+        if (comboCampeonato.getSelectedItem() == null || comboCategoria.getSelectedItem() == null
+                || comboAtleta1.getSelectedItem() == null || comboAtleta2.getSelectedItem() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecione o campeonato, a categoria e os dois atletas.");
             return;
         }
         if (!atletasSaoDiferentes()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Atleta 1 e Atleta 2 precisam ser diferentes.");
             return;
         }
-        if (campoResultado.getText().trim().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Informe o resultado da luta.");
+        Object vencedor = comboResultado.getSelectedItem();
+        if (vencedor == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecione o vencedor da luta.");
             return;
         }
         try {
@@ -367,18 +379,18 @@ private int idSelecionado = -1;
             luta.setCategoriaId(((com.mycompany.atividade12.model.Categoria) comboCategoria.getSelectedItem()).getId());
             luta.setAtletaId(((com.mycompany.atividade12.model.Atleta) comboAtleta1.getSelectedItem()).getId());
             luta.setAtleta2Id(((com.mycompany.atividade12.model.Atleta) comboAtleta2.getSelectedItem()).getId());
-            luta.setResultado(campoResultado.getText());
-            dao.atualizar(luta);
-            carregarTabela();
-        } catch (java.sql.SQLException ex) {
-            if ("23514".equals(ex.getSQLState()) || "23502".equals(ex.getSQLState())) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Informe o resultado da luta.");
+            luta.setResultado(((com.mycompany.atividade12.model.Atleta) vencedor).getNome());
+            if (idSelecionado == -1) {
+                dao.inserir(luta);
             } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+                dao.atualizar(luta);
             }
+            carregarTabela();
+            limparFormulario();
+        } catch (java.sql.SQLException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
-    }//GEN-LAST:event_btnAtualizarActionPerformed
-
+    }//GEN-LAST:event_btnSalvarActionPerformed
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         if (idSelecionado == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Selecione uma luta na tabela.");
@@ -387,8 +399,9 @@ private int idSelecionado = -1;
         try {
             dao.excluir(idSelecionado);
             carregarTabela();
+            limparFormulario();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -422,12 +435,11 @@ private int idSelecionado = -1;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JTextField campoResultado;
+    private javax.swing.JComboBox<String> comboResultado;
     private javax.swing.JComboBox<String> comboAtleta1;
     private javax.swing.JComboBox<String> comboAtleta2;
     private javax.swing.JComboBox<String> comboCampeonato;

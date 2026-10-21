@@ -46,7 +46,6 @@ public class AtletaFrameNB extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaAtleta = new javax.swing.JTable();
         btnSalvar = new javax.swing.JButton();
-        btnAtualizar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
@@ -83,9 +82,6 @@ public class AtletaFrameNB extends javax.swing.JFrame {
         btnSalvar.setBackground(new java.awt.Color(204, 255, 204));
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(this::btnSalvarActionPerformed);
-
-        btnAtualizar.setText("Atualizar");
-        btnAtualizar.addActionListener(this::btnAtualizarActionPerformed);
 
         btnExcluir.setBackground(new java.awt.Color(255, 204, 204));
         btnExcluir.setText("Excluir");
@@ -131,8 +127,6 @@ public class AtletaFrameNB extends javax.swing.JFrame {
                 .addGap(65, 65, 65)
                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -171,7 +165,6 @@ public class AtletaFrameNB extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -185,6 +178,16 @@ private final com.mycompany.atividade12.dao.AcademiaDAO academiaDao = new com.my
 private javax.swing.table.DefaultTableModel modeloTabela;
 private java.util.List<com.mycompany.atividade12.model.Atleta> listaAtual;
 private int idSelecionado = -1;
+
+    private void limparFormulario() {
+        idSelecionado = -1;
+        campoNome.setText("");
+        campoNasc.setText("");
+        campoFaixa.setText("");
+        campoPeso.setText("");
+        com.mycompany.atividade12.util.Combos.limpar(comboAcademia);
+        tabelaAtleta.clearSelection();
+    }
 
 private void configurarTabela() {
     modeloTabela = new javax.swing.table.DefaultTableModel(
@@ -201,10 +204,9 @@ private void configurarTabela() {
     private void carregarAcademias() {
         try {
             java.util.List<com.mycompany.atividade12.model.Academia> academias = academiaDao.listarTodos();
-            javax.swing.DefaultComboBoxModel modelo = new javax.swing.DefaultComboBoxModel(academias.toArray());
-            comboAcademia.setModel(modelo);
+            com.mycompany.atividade12.util.Combos.carregar(comboAcademia, academias);
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }
 
@@ -219,7 +221,7 @@ private void configurarTabela() {
                 });
             }
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }
 
@@ -248,32 +250,13 @@ private void configurarTabela() {
     }//GEN-LAST:event_comboAcademiaActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try {
-            com.mycompany.atividade12.model.Atleta atleta = new com.mycompany.atividade12.model.Atleta();
-            atleta.setNome(campoNome.getText());
-            atleta.setDataNasc(java.time.LocalDate.parse(campoNasc.getText().trim(), Formatacao.DATA_BR));
-            atleta.setFaixa(campoFaixa.getText());
-            atleta.setPeso(Formatacao.lerDecimal(campoPeso.getText()));
-            com.mycompany.atividade12.model.Academia academia = (com.mycompany.atividade12.model.Academia) comboAcademia.getSelectedItem();
-            atleta.setAcademiaId(academia.getId());
-            dao.inserir(atleta);
-            carregarTabela();
-        } catch (java.time.format.DateTimeParseException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD-MM-AAAA");
-        } catch (NumberFormatException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Peso deve ser um número.");
-        } catch (java.sql.SQLException ex) {
-            if ("23505".equals(ex.getSQLState())) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Já existe um atleta com esse nome.");
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
-            }
+        if (campoNome.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Informe o nome do atleta.");
+            return;
         }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        if (idSelecionado == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecione um atleta na tabela primeiro.");
+        Object academiaSelecionada = comboAcademia.getSelectedItem();
+        if (academiaSelecionada == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecione a academia.");
             return;
         }
         try {
@@ -283,30 +266,29 @@ private void configurarTabela() {
             atleta.setDataNasc(java.time.LocalDate.parse(campoNasc.getText().trim(), Formatacao.DATA_BR));
             atleta.setFaixa(campoFaixa.getText());
             atleta.setPeso(Formatacao.lerDecimal(campoPeso.getText()));
-            com.mycompany.atividade12.model.Academia academia = (com.mycompany.atividade12.model.Academia) comboAcademia.getSelectedItem();
-            atleta.setAcademiaId(academia.getId());
-            dao.atualizar(atleta);
+            atleta.setAcademiaId(((com.mycompany.atividade12.model.Academia) academiaSelecionada).getId());
+            if (idSelecionado == -1) {
+                dao.inserir(atleta);
+            } else {
+                dao.atualizar(atleta);
+            }
             carregarTabela();
+            limparFormulario();
         } catch (java.time.format.DateTimeParseException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD/MM/AAAA (ex: 20/11/2026).");
         } catch (NumberFormatException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Peso deve ser um número.");
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            if ("23505".equals(ex.getSQLState())) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Já existe um atleta com esse nome.");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
+            }
         }
-
-    }//GEN-LAST:event_btnAtualizarActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        idSelecionado = -1;
-        campoNome.setText("");
-        campoNasc.setText("");
-        campoFaixa.setText("");
-        campoPeso.setText("");
-        if (comboAcademia.getItemCount() > 0) {
-            comboAcademia.setSelectedIndex(0);
-        }
-        tabelaAtleta.clearSelection();
+        limparFormulario();
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -317,8 +299,9 @@ private void configurarTabela() {
         try {
             dao.excluir(idSelecionado);
             carregarTabela();
+            limparFormulario();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -352,7 +335,6 @@ private void configurarTabela() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;

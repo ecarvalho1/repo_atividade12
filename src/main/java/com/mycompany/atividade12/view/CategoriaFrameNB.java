@@ -43,7 +43,6 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaCategoria = new javax.swing.JTable();
         btnSalvar = new javax.swing.JButton();
-        btnAtualizar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
@@ -82,9 +81,6 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
         btnSalvar.setBackground(new java.awt.Color(204, 255, 204));
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(this::btnSalvarActionPerformed);
-
-        btnAtualizar.setText("Atualizar");
-        btnAtualizar.addActionListener(this::btnAtualizarActionPerformed);
 
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(this::btnLimparActionPerformed);
@@ -131,8 +127,6 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
                                 .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -164,7 +158,6 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -180,6 +173,15 @@ private int idSelecionado = -1;
     private void campoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_campoNomeActionPerformed
+    private void limparFormulario() {
+        idSelecionado = -1;
+        campoNome.setText("");
+        campoFaixa.setText("");
+        campoPesoMin.setText("");
+        campoPesoMax.setText("");
+        tabelaCategoria.clearSelection();
+    }
+
     private void configurarTabela() {
         modeloTabela = new javax.swing.table.DefaultTableModel(
                 new Object[]{"ID", "Nome", "Faixa", "Peso mín.", "Peso máx."}, 0) {
@@ -203,7 +205,7 @@ private int idSelecionado = -1;
                 });
             }
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }
 
@@ -231,28 +233,8 @@ private int idSelecionado = -1;
     }//GEN-LAST:event_campoPesoMaxActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try {
-            com.mycompany.atividade12.model.Categoria categoria = new com.mycompany.atividade12.model.Categoria();
-            categoria.setNome(campoNome.getText());
-            categoria.setFaixa(campoFaixa.getText());
-            categoria.setPesoMin(Formatacao.lerDecimal(campoPesoMin.getText()));
-            categoria.setPesoMax(Formatacao.lerDecimal(campoPesoMax.getText()));
-            dao.inserir(categoria);
-            carregarTabela();
-        } catch (NumberFormatException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Peso mínimo e máximo devem ser números (ex: 76.5).");
-        } catch (java.sql.SQLException ex) {
-            if ("23505".equals(ex.getSQLState())) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Já existe uma categoria com esse nome.");
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
-            }
-        }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        if (idSelecionado == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecione uma categoria na tabela primeiro.");
+        if (campoNome.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Informe o nome da categoria.");
             return;
         }
         try {
@@ -262,22 +244,26 @@ private int idSelecionado = -1;
             categoria.setFaixa(campoFaixa.getText());
             categoria.setPesoMin(Formatacao.lerDecimal(campoPesoMin.getText()));
             categoria.setPesoMax(Formatacao.lerDecimal(campoPesoMax.getText()));
-            dao.atualizar(categoria);
+            if (idSelecionado == -1) {
+                dao.inserir(categoria);
+            } else {
+                dao.atualizar(categoria);
+            }
             carregarTabela();
+            limparFormulario();
         } catch (NumberFormatException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, "Peso mínimo e máximo devem ser números (ex: 76.5).");
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            if ("23505".equals(ex.getSQLState())) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Já existe uma categoria com esse nome.");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
+            }
         }
-    }//GEN-LAST:event_btnAtualizarActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        idSelecionado = -1;
-        campoNome.setText("");
-        campoFaixa.setText("");
-        campoPesoMin.setText("");
-        campoPesoMax.setText("");
-        tabelaCategoria.clearSelection();
+        limparFormulario();
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -288,8 +274,9 @@ private int idSelecionado = -1;
         try {
             dao.excluir(idSelecionado);
             carregarTabela();
+            limparFormulario();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -323,7 +310,6 @@ private int idSelecionado = -1;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;

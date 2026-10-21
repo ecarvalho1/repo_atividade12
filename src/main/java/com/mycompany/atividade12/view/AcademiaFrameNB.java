@@ -39,7 +39,6 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaAcademia = new javax.swing.JTable();
         btnSalvar = new javax.swing.JButton();
-        btnAtualizar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExluir = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
@@ -70,9 +69,6 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
         btnSalvar.setBackground(new java.awt.Color(204, 255, 204));
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(this::btnSalvarActionPerformed);
-
-        btnAtualizar.setText("Atualizar");
-        btnAtualizar.addActionListener(this::btnAtualizarActionPerformed);
 
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(this::btnLimparActionPerformed);
@@ -108,8 +104,6 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(44, 44, 44)
-                        .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
                         .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)
                         .addComponent(btnExluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -136,7 +130,6 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExluir, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -151,6 +144,13 @@ private int idSelecionado = -1;
     private void campoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoNomeActionPerformed
 
     }//GEN-LAST:event_campoNomeActionPerformed
+    private void limparFormulario() {
+        idSelecionado = -1;
+        campoNome.setText("");
+        campoCidade.setText("");
+        tabelaAcademia.clearSelection();
+    }
+
     private void configurarTabela() {
     modeloTabela = new javax.swing.table.DefaultTableModel(
             new Object[]{"ID", "Nome", "Cidade"}, 0) {
@@ -170,28 +170,12 @@ private void carregarTabela() {
             modeloTabela.addRow(new Object[]{a.getId(), a.getNome(), a.getCidade()});
         }
     } catch (java.sql.SQLException ex) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+        javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
     }
 }
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        com.mycompany.atividade12.model.Academia academia = new com.mycompany.atividade12.model.Academia();
-        academia.setNome(campoNome.getText());
-        academia.setCidade(campoCidade.getText());
-        try {
-            dao.inserir(academia);
-            carregarTabela();
-        } catch (java.sql.SQLException ex) {
-            if ("23505".equals(ex.getSQLState())) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Já existe uma academia com esse nome.");
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
-            }
-        }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        if (idSelecionado == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecione uma academia na tabela primeiro.");
+        if (campoNome.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Informe o nome da academia.");
             return;
         }
         com.mycompany.atividade12.model.Academia academia = new com.mycompany.atividade12.model.Academia();
@@ -199,18 +183,24 @@ private void carregarTabela() {
         academia.setNome(campoNome.getText());
         academia.setCidade(campoCidade.getText());
         try {
-            dao.atualizar(academia);
+            if (idSelecionado == -1) {
+                dao.inserir(academia);
+            } else {
+                dao.atualizar(academia);
+            }
             carregarTabela();
+            limparFormulario();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            if ("23505".equals(ex.getSQLState())) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Já existe uma academia com esse nome.");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
+            }
         }
-    }//GEN-LAST:event_btnAtualizarActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        idSelecionado = -1;
-        campoNome.setText("");
-        campoCidade.setText("");
-        tabelaAcademia.clearSelection(); // troque jTable1 pelo nome da sua tabela
+        limparFormulario();
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnExluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExluirActionPerformed
@@ -223,8 +213,9 @@ private void carregarTabela() {
         try {
             dao.excluir(id);
             carregarTabela();
+            limparFormulario();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }//GEN-LAST:event_btnExluirActionPerformed
 
@@ -262,7 +253,6 @@ private void carregarTabela() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;

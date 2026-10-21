@@ -41,7 +41,6 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaCampeonato = new javax.swing.JTable();
         btnSalvar = new javax.swing.JButton();
-        btnAtualizar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -70,9 +69,6 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
         btnSalvar.setBackground(new java.awt.Color(204, 255, 204));
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(this::btnSalvarActionPerformed);
-
-        btnAtualizar.setText("Atualizar");
-        btnAtualizar.addActionListener(this::btnAtualizarActionPerformed);
 
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(this::btnLimparActionPerformed);
@@ -112,8 +108,6 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -143,7 +137,6 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -157,19 +150,37 @@ private javax.swing.table.DefaultTableModel modeloTabela;
 private java.util.List<com.mycompany.atividade12.model.Campeonato> listaAtual;
 private int idSelecionado = -1;
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        if (campoNome.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Informe o nome do campeonato.");
+            return;
+        }
         try {
             com.mycompany.atividade12.model.Campeonato campeonato = new com.mycompany.atividade12.model.Campeonato();
+            campeonato.setId(idSelecionado);
             campeonato.setNome(campoNome.getText());
             campeonato.setData(java.time.LocalDate.parse(campoData.getText().trim(), Formatacao.DATA_BR));
             campeonato.setLocal(campoLocal.getText());
-            dao.inserir(campeonato);
+            if (idSelecionado == -1) {
+                dao.inserir(campeonato);
+            } else {
+                dao.atualizar(campeonato);
+            }
             carregarTabela();
+            limparFormulario();
         } catch (java.time.format.DateTimeParseException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD/MM/AAAA (ex: 20/11/2026)");
+            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD/MM/AAAA (ex: 20/11/2026).");
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
+    private void limparFormulario() {
+        idSelecionado = -1;
+        campoNome.setText("");
+        campoData.setText("");
+        campoLocal.setText("");
+        tabelaCampeonato.clearSelection();
+    }
+
     private void configurarTabela() {
         modeloTabela = new javax.swing.table.DefaultTableModel(
                 new Object[]{"ID", "Nome", "Data", "Local"}, 0) {
@@ -193,7 +204,7 @@ private int idSelecionado = -1;
                 });
             }
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }
 
@@ -207,32 +218,8 @@ private int idSelecionado = -1;
             campoLocal.setText(campeonato.getLocal());
         }
     }
-    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        if (idSelecionado == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecione um campeonato na tabela primeiro.");
-            return;
-        }
-        try {
-            com.mycompany.atividade12.model.Campeonato campeonato = new com.mycompany.atividade12.model.Campeonato();
-            campeonato.setId(idSelecionado);
-            campeonato.setNome(campoNome.getText());
-            campeonato.setData(java.time.LocalDate.parse(campoData.getText().trim(), Formatacao.DATA_BR));
-            campeonato.setLocal(campoLocal.getText());
-            dao.atualizar(campeonato);
-            carregarTabela();
-        } catch (java.time.format.DateTimeParseException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data inválida. Use DD-MM-AAAA");
-        } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
-        }
-    }//GEN-LAST:event_btnAtualizarActionPerformed
-
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        idSelecionado = -1;
-        campoNome.setText("");
-        campoData.setText("");
-        campoLocal.setText("");
-        tabelaCampeonato.clearSelection();
+        limparFormulario();
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -243,8 +230,9 @@ private int idSelecionado = -1;
         try {
             dao.excluir(idSelecionado);
             carregarTabela();
+            limparFormulario();
         } catch (java.sql.SQLException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            javax.swing.JOptionPane.showMessageDialog(this, com.mycompany.atividade12.util.ErrosBanco.traduzir(ex));
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -278,7 +266,6 @@ private int idSelecionado = -1;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
