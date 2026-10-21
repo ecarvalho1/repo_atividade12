@@ -198,7 +198,7 @@ public class LutaFrameNB extends javax.swing.JFrame {
 private final com.mycompany.atividade12.dao.LutaDAO dao = new com.mycompany.atividade12.dao.LutaDAO();
 private final com.mycompany.atividade12.dao.CampeonatoDAO campeonatoDao = new com.mycompany.atividade12.dao.CampeonatoDAOJdbc();
 private final com.mycompany.atividade12.dao.CategoriaDAO categoriaDao = new com.mycompany.atividade12.dao.CategoriaDAOJdbc();
-private final com.mycompany.atividade12.dao.AtletaDAO atletaDao = new com.mycompany.atividade12.dao.AtletaDAO();
+private final com.mycompany.atividade12.dao.AtletaDAO atletaDao = new com.mycompany.atividade12.dao.AtletaDAOJdbc();
 private javax.swing.table.DefaultTableModel modeloTabela;
 private java.util.List<com.mycompany.atividade12.model.Luta> listaAtual;
 private int idSelecionado = -1;

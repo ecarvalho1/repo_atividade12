@@ -154,7 +154,7 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 private final com.mycompany.atividade12.dao.InscricaoDAO dao = new com.mycompany.atividade12.dao.InscricaoDAO();
-private final com.mycompany.atividade12.dao.AtletaDAO atletaDao = new com.mycompany.atividade12.dao.AtletaDAO();
+private final com.mycompany.atividade12.dao.AtletaDAO atletaDao = new com.mycompany.atividade12.dao.AtletaDAOJdbc();
 private final com.mycompany.atividade12.dao.CategoriaDAO categoriaDao = new com.mycompany.atividade12.dao.CategoriaDAOJdbc();
 private final com.mycompany.atividade12.dao.CampeonatoDAO campeonatoDao = new com.mycompany.atividade12.dao.CampeonatoDAOJdbc();
 private javax.swing.table.DefaultTableModel modeloTabela;
