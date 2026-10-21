@@ -138,7 +138,7 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-private final com.mycompany.atividade12.dao.AcademiaDAO dao = new com.mycompany.atividade12.dao.AcademiaDAO();
+private final com.mycompany.atividade12.dao.AcademiaDAO dao = new com.mycompany.atividade12.dao.AcademiaDAOJdbc();
 private javax.swing.table.DefaultTableModel modeloTabela;
 private int idSelecionado = -1;
     private void campoNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoNomeActionPerformed
