@@ -174,7 +174,7 @@ public class AtletaFrameNB extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 private final com.mycompany.atividade12.dao.AtletaDAO dao = new com.mycompany.atividade12.dao.AtletaDAO();
-private final com.mycompany.atividade12.dao.AcademiaDAO academiaDao = new com.mycompany.atividade12.dao.AcademiaDAO();
+private final com.mycompany.atividade12.dao.AcademiaDAO academiaDao = new com.mycompany.atividade12.dao.AcademiaDAOJdbc();
 private javax.swing.table.DefaultTableModel modeloTabela;
 private java.util.List<com.mycompany.atividade12.model.Atleta> listaAtual;
 private int idSelecionado = -1;

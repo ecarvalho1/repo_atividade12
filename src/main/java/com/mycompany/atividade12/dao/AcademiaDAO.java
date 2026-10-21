@@ -1,78 +1,24 @@
 package com.mycompany.atividade12.dao;
 
 import com.mycompany.atividade12.model.Academia;
-import com.mycompany.atividade12.util.Conexao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * camada de acesso a dados (DAO) da tabela "academia"
- * todas as operações usam PreparedStatement para evitar SQL Injection
+ * Contrato de acesso a dados da entidade Academia.
+ * O resto do sistema depende só desta interface, nunca de JDBC.
  */
-public class AcademiaDAO {
+public interface AcademiaDAO {
 
-    public void inserir(Academia academia) throws SQLException {
-        String sql = "INSERT INTO academia (nome, cidade) VALUES (?, ?)";
-        try (Connection con = Conexao.conectar();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setString(1, academia.getNome());
-            stmt.setString(2, academia.getCidade());
-            stmt.executeUpdate();
-        }
-    }
+    void inserir(Academia academia) throws SQLException;
 
-    public void atualizar(Academia academia) throws SQLException {
-        String sql = "UPDATE academia SET nome = ?, cidade = ? WHERE id = ?";
-        try (Connection con = Conexao.conectar();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setString(1, academia.getNome());
-            stmt.setString(2, academia.getCidade());
-            stmt.setInt(3, academia.getId());
-            stmt.executeUpdate();
-        }
-    }
+    void atualizar(Academia academia) throws SQLException;
 
-    public void excluir(int id) throws SQLException {
-        String sql = "DELETE FROM academia WHERE id = ?";
-        try (Connection con = Conexao.conectar();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        }
-    }
+    void excluir(int id) throws SQLException;
 
-    public Academia buscarPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM academia WHERE id = ?";
-        try (Connection con = Conexao.conectar();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapearAcademia(rs);
-                }
-            }
-        }
-        return null;
-    }
+    /** @return a entidade ou null se não existir */
+    Academia buscarPorId(int id) throws SQLException;
 
-    public List<Academia> listarTodos() throws SQLException {
-        List<Academia> lista = new ArrayList<>();
-        String sql = "SELECT * FROM academia ORDER BY nome";
-        try (Connection con = Conexao.conectar();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                lista.add(mapearAcademia(rs));
-            }
-        }
-        return lista;
-    }
-    private Academia mapearAcademia(ResultSet rs) throws SQLException {
-    return new Academia(rs.getInt("id"), rs.getString("nome"), rs.getString("cidade"));
-  }
+    List<Academia> listarTodos() throws SQLException;
 }
