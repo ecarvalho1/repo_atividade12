@@ -166,7 +166,7 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-private final com.mycompany.atividade12.dao.CategoriaDAO dao = new com.mycompany.atividade12.dao.CategoriaDAOJdbc();
+private final com.mycompany.atividade12.dao.CategoriaDAO dao = new com.mycompany.atividade12.dao.CategoriaDAO();
 private javax.swing.table.DefaultTableModel modeloTabela;
 private java.util.List<com.mycompany.atividade12.model.Categoria> listaAtual;
 private int idSelecionado = -1;
