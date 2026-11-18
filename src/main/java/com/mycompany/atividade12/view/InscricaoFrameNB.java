@@ -44,7 +44,6 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        btnVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,10 +83,6 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(this::btnExcluirActionPerformed);
 
-        btnVoltar.setBackground(new java.awt.Color(204, 204, 204));
-        btnVoltar.setText("Voltar");
-        btnVoltar.addActionListener(this::btnVoltarActionPerformed);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -121,9 +116,6 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(btnVoltar)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,8 +139,7 @@ public class InscricaoFrameNB extends javax.swing.JFrame {
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnVoltar))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -291,10 +282,6 @@ private int idSelecionado = -1;
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
-    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        dispose();
-    }//GEN-LAST:event_btnVoltarActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -324,7 +311,6 @@ private int idSelecionado = -1;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JButton btnVoltar;
     private javax.swing.JComboBox<String> comboAtleta;
     private javax.swing.JComboBox<String> comboCampeonato;
     private javax.swing.JComboBox<String> comboCategoria;

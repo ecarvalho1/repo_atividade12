@@ -43,7 +43,6 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,10 +76,6 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(this::btnExcluirActionPerformed);
 
-        jButton1.setBackground(new java.awt.Color(204, 204, 204));
-        jButton1.setText("Voltar");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,9 +108,6 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
                                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 7, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,8 +131,7 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1))
+                .addGap(29, 29, 29))
         );
 
         pack();
@@ -236,10 +227,6 @@ private int idSelecionado = -1;
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -272,7 +259,6 @@ private int idSelecionado = -1;
     private javax.swing.JTextField campoData;
     private javax.swing.JTextField campoLocal;
     private javax.swing.JTextField campoNome;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

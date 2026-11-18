@@ -41,7 +41,6 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExluir = new javax.swing.JButton();
-        btnVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,10 +76,6 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
         btnExluir.setText("Excluir");
         btnExluir.addActionListener(this::btnExluirActionPerformed);
 
-        btnVoltar.setBackground(new java.awt.Color(204, 204, 204));
-        btnVoltar.setText("Voltar");
-        btnVoltar.addActionListener(this::btnVoltarActionPerformed);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -106,8 +101,7 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
                         .addGap(44, 44, 44)
                         .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(28, 28, 28)
-                        .addComponent(btnExluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnVoltar))
+                        .addComponent(btnExluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -132,8 +126,7 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExluir, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnVoltar))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -223,10 +216,6 @@ private void carregarTabela() {
         // TODO add your handling code here:
     }//GEN-LAST:event_campoCidadeActionPerformed
 
-    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        dispose();
-    }//GEN-LAST:event_btnVoltarActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -256,7 +245,6 @@ private void carregarTabela() {
     private javax.swing.JButton btnExluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JButton btnVoltar;
     private javax.swing.JTextField campoCidade;
     private javax.swing.JTextField campoNome;
     private javax.swing.JLabel jLabel1;

@@ -50,7 +50,6 @@
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                       <Component id="btnExluir" min="-2" pref="86" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="btnVoltar" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -84,8 +83,7 @@
                   <Component id="btnLimpar" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                   <Component id="btnExluir" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnVoltar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="29" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -181,17 +179,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExluirActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnVoltar">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="cc" green="cc" red="cc" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Voltar"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVoltarActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

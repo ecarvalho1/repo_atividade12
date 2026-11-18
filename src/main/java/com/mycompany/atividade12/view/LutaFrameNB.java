@@ -41,7 +41,7 @@ public class LutaFrameNB extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        comboResultado = new javax.swing.JComboBox<>();
+        comboResultado = new javax.swing.JComboBox();
         comboCampeonato = new javax.swing.JComboBox<>();
         comboCategoria = new javax.swing.JComboBox<>();
         comboAtleta1 = new javax.swing.JComboBox<>();
@@ -51,7 +51,6 @@ public class LutaFrameNB extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        btnVoltar = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,10 +109,6 @@ public class LutaFrameNB extends javax.swing.JFrame {
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(this::btnExcluirActionPerformed);
 
-        btnVoltar.setBackground(new java.awt.Color(204, 204, 204));
-        btnVoltar.setText("Voltar");
-        btnVoltar.addActionListener(this::btnVoltarActionPerformed);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -155,9 +150,6 @@ public class LutaFrameNB extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(btnVoltar)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,8 +181,7 @@ public class LutaFrameNB extends javax.swing.JFrame {
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(btnVoltar))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -405,10 +396,6 @@ private int idSelecionado = -1;
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
-    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        dispose();
-    }//GEN-LAST:event_btnVoltarActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -438,12 +425,11 @@ private int idSelecionado = -1;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JButton btnVoltar;
-    private javax.swing.JComboBox<String> comboResultado;
     private javax.swing.JComboBox<String> comboAtleta1;
     private javax.swing.JComboBox<String> comboAtleta2;
     private javax.swing.JComboBox<String> comboCampeonato;
     private javax.swing.JComboBox<String> comboCategoria;
+    private javax.swing.JComboBox comboResultado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
