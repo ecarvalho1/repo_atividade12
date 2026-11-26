@@ -3,6 +3,7 @@
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="Sistema Campeonato - BJJ"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -118,7 +119,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Data nascimento (DD-MM-AAAA):"/>
+        <Property name="text" type="java.lang.String" value="Data nascimento (DD/MM/AAAA):"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">

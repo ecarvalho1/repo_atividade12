@@ -45,10 +45,11 @@ public class CampeonatoFrameNB extends javax.swing.JFrame {
         btnExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema Campeonato - BJJ");
 
         jLabel1.setText("Nome:");
 
-        jLabel2.setText("Data (DD-MM-AAAA):");
+        jLabel2.setText("Data (DD/MM/AAAA):");
 
         jLabel3.setText("Local:");
 

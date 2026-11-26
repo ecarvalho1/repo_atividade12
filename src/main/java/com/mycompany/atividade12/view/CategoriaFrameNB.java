@@ -47,6 +47,7 @@ public class CategoriaFrameNB extends javax.swing.JFrame {
         btnExcluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema Campeonato - BJJ");
 
         jLabel1.setText("Nome:");
 

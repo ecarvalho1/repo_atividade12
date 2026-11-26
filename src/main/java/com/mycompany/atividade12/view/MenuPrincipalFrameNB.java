@@ -37,6 +37,7 @@ public class MenuPrincipalFrameNB extends javax.swing.JFrame {
         btnLuta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema Campeonato - BJJ");
 
         jLabel1.setText("Menu Principal");
 

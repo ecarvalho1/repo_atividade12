@@ -50,10 +50,11 @@ public class AtletaFrameNB extends javax.swing.JFrame {
         btnLimpar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema Campeonato - BJJ");
 
         jLabel1.setText("Nome:");
 
-        jLabel2.setText("Data nascimento (DD-MM-AAAA):");
+        jLabel2.setText("Data nascimento (DD/MM/AAAA):");
 
         jLabel3.setText("Faixa:");
 

@@ -26,7 +26,7 @@ public class TelaLogin extends javax.swing.JFrame {
         lblMensagem = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("ChupetaFlix - Login");
+        setTitle("Sistema Campeonato - BJJ");
         setResizable(false);
 
         lblLogin.setText("Login:");
@@ -136,7 +136,7 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblMensagem;
     private javax.swing.JLabel lblSenha;
-    private javax.swing.JPasswordField txtSenha;
     private javax.swing.JTextField txtLogin;
+    private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 }

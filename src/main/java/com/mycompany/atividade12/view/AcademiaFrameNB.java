@@ -43,6 +43,7 @@ public class AcademiaFrameNB extends javax.swing.JFrame {
         btnExluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema Campeonato - BJJ");
 
         jLabel1.setText("Nome:");
 
